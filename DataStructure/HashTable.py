@@ -160,17 +160,16 @@ hash_table
 # * 개방 해슁 도는 Open Hashing 기법 중 하나 : 해쉬 테이블의 저장공간 외의 공간을 활용하는 기법
 # * 충돌이 일어나면, 링크드 리스트라는 자료 구조를 사용해서, 링크드 리스트로 데이터를 추가로 뒤에 연결시켜서 저장하는 기법
 
-# 6.2. Linear Probing 기법
-# * 폐쇄 해슁 또는 Close Hashing 기법 중 하나 : 해쉬 테이블 저장공간 안에서 충돌 문제를 해결하는 기법
-# * 충돌이 일어나면, 해당 hash address의 다음 address 부터 맨 처음 빈공간에 저장하는 기법
-
 hash_table = list([0 for i in range(8)])
+
 
 def get_key(data):
     return hash(data)
 
+
 def hash_function(key):
     return key % 8
+
 
 def save_data(data,value):
     index_key = get_key(data)
@@ -179,6 +178,29 @@ def save_data(data,value):
         for index in range(len(hash_table[hash_address])):
             if hash_table[hash_address][index][0] == index_key:
                 hash_table[hash_address][index][1] = value
-                return;
+                return
         hash_table[hash_address].append([index_key, value])
-    hash_table[hash_address] = value
+    else:
+        hash_table[hash_address] = [[index_key, value]]
+
+
+def read_data(data):
+    index_key = get_key(data)
+    hash_address = hash_function(get_key(data))
+
+    if hash_table[hash_address] != 0:
+        for index in range(len(hash_table[hash_address])):
+            if hash_table[hash_address][index][0] == index_key:
+                return hash_table[hash_address][index][1]
+        return None
+    else:
+        return None
+
+print(hash('Dave') % 8)
+print(hash('Dd') % 8)
+print(hash('Data') % 8)
+
+
+save_data('Dd', '1201023010')
+save_data('Data', '1201023010')
+read_data('Dd')
