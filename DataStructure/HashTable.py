@@ -249,3 +249,98 @@ def read_data(data):
         return None
     else:
         return None
+
+# 6.3. 빈번한 충돌을 개선하는 기법
+# 해쉬 함수를 재정의 및 해쉬 테이블 저장공간을 확대
+# 예
+# hash_table = list([None for i in range(16)])
+#
+# def hash_function(key):
+#       return key % 16
+#
+# 이전의 8 보다 2배의 공간 확대
+
+# 참고 : 해쉬 함수와 키 생성 함수
+# 파이썬의 hash() 함수는 실행할 때마다, 값이 달라질 수 있음
+# 유명한 해쉬 함수들이 있음: SHA(Secure Hash Algorithm, 안전한 해시 알고리즘)
+# 어떤 데이터도 유일한 고정된 크기의 고정값을 리턴해주므로, 해쉬 함수로 유용하게 활용 가능
+
+# SHA-1
+import hashlib
+
+data = 'test'.encode()
+hash_object = hashlib.sha1()
+hash_object.update(data)
+# hash_object.update(b'test') 와 같음
+hex_dig = hash_object.hexdigest() # 16진수 추출
+print (hex_dig)
+
+# SHA-256
+data = 'test'.encode()
+hash_object = hashlib.sha256()
+hash_object.update(data)
+hex_dig = hash_object.hexdigest()
+print (hex_dig)
+
+# Hash 값이 고정된 값이 나온다
+# 원래 데이터가 어떤것인지 추론할 수 없다.
+
+# 기존 Chaining 기법을 SHA 256 이용해 Hash 구하도록 변경
+import hashlib
+hash_table = list([0 for i in range(8)])
+
+
+def get_key(data):
+    hash_object = hashlib.sha256()
+    hash_object.update(data.encode())
+    hex_dig = hash_object.hexdigest()
+    return int(hex_dig, 16)
+
+
+def hash_function(key):
+    return key % 8
+
+
+def save_data(data,value):
+    index_key = get_key(data)
+    hash_address = hash_function(index_key)
+    if hash_table[hash_address] != 0:
+        for index in range(len(hash_table[hash_address])):
+            if hash_table[hash_address][index][0] == index_key:
+                hash_table[hash_address][index][1] = value
+                return
+        hash_table[hash_address].append([index_key, value])
+    else:
+        hash_table[hash_address] = [[index_key, value]]
+
+
+def read_data(data):
+    index_key = get_key(data)
+    hash_address = hash_function(get_key(data))
+
+    if hash_table[hash_address] != 0:
+        for index in range(len(hash_table[hash_address])):
+            if hash_table[hash_address][index][0] == index_key:
+                return hash_table[hash_address][index][1]
+        return None
+    else:
+        return None
+
+
+print(get_key('db') % 8)
+print(get_key('da') % 8)
+print(get_key('dh') % 8)
+
+save_data('da', '3333333333')
+save_data('dh', '0120120123')
+read_data('dh')
+
+# 7. 시간 복잡도
+# * 일반적인 경우 (Collision 이 없는 경우)는 O (1)
+# * 최악의 경우 (Collision 이 모두 발생하는 경우)는 O(n)
+
+# 해쉬 테이블의 경우, 일반적인 경우를 기대하고 만들기 때문에, 시간 복잡도는 O(1) 이라고 말할 수 있음
+
+# 검색에서 해쉬 테이블의 사용 예
+# * 16개의 배열에 데이털르 저장하고, 검색할 떄 O(n)
+# * 16개의 데이터 저장공간을 가진 위의 해쉬 테이블에 데이터를 저장하고, 검색할 때 O(1)
