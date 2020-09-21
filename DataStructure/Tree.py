@@ -102,3 +102,51 @@ print(BST.search(0))
 # - 해당 Node의 왼쪽 Branch가 삭제할 Node의 왼쪽 Child Node를 가리키게 함
 # - 해당 Node의 오른쪽 Branch가 삭제할 Node의 오른쪽 Child Node를 가리키게 함
 # - 만약 해당 Node가 오른쪽 Child Node를 가지고 있었을 경우에는, 해당 Node의 본래 Parent Node의 왼쪽 Branch가 해당 오른쪽 Child Node를 가리키게 함
+
+# 5.5 이진 탐색 트리 삭제 코드 구현과 분석
+
+# 5.5.1 삭제할 Node 탐색
+# 삭제할 Node가 없는 경우도 처리해야 함
+# 이를 위해 삭제할 Node가 없는 경우는 False를 리턴하고, 함수를 종료 시킴
+
+
+def delete(self, value):
+    searched = False
+    self.current_node = self.head
+    self.parent = self.head
+    while self.current_node:
+        if self.current_node.value == value:
+            searched = True
+            break
+        elif value < self.current_node.value:
+            self.parent = self.current_node
+            self.current_node = self.current_node.left
+        else:
+            self.parent = self.current_node
+            self.current_node = self.current_node.right
+
+    if searched == False:
+        return False
+
+    ### 이후부터 Case들을 분리해서, 코드 작성성
+
+    # 삭제할 Node가 Leaf Node 인 경우
+    # self.current_node 가 삭제할 Node, self.parent는 삭제할 Node의 Parent Node인 상태
+    if self.current_node.left == None and self.current_node.right == None:
+        if value < self.parent.value:
+            self.parent.left = None
+        else:
+            self.parent.right = None
+        del self.current_node
+
+    # 삭제할 노드가 Child Node를 한 개 가지고 있을 경우
+    if self.current_node.left != None and self.current_node.right == None:
+        if value < self.parent.value:
+            self.parent.left = self.current_node.left
+        else:
+            self.parent.right = self.current_node.left
+    elif self.current_node.left == None and self.current_node.right != None:
+        if value < self.parent.value:
+            self.parent.left = self.current_node.right
+        else:
+            self.parent.right = self.current_node.right
