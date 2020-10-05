@@ -150,3 +150,55 @@ def delete(self, value):
             self.parent.left = self.current_node.right
         else:
             self.parent.right = self.current_node.right
+
+
+    # 5.5.3. Case3-1: 삭제할 Node가 Child Node를 두 개 가지고 있을 경우 (삭제할 Node가 Parent Node 왼쪽에 있을 때)
+    # 기본 사용 가능 전략
+    #   삭제할 Node의 오른쪽 자식 중, 가장 작은 값을 삭제할 Node의 Parent Node가 가리키도록 한다.
+    #   삭제할 Node의 왼쪽 자식 중, 가장 큰 값을 삭제할 Node의 Parent Node가 가리키도록 한다.
+    # 기본 사용 가능 전략 중, 1번 전략을 사용하여 코드를 구현하기로 함
+    #   경우의 수가 또다시 두가지가 있음
+    # Case3-1-1: 삭제할 Node가 Parent Node의 왼쪽에 있고, 삭제할 Node의 오른쪽 자식 중, 가장 작은 값을 가진 Node의 Child Node가 없을 때
+    # Case3-1-2: 삭제할 Node가 Parent Node의 왼쪽에 있고, 삭제할 Node의 오른쪽 자식 중, 가장 작은 값을 가진 Node의 오른쪽에 Child Node가 있을 때
+    # 가장 작은 값을 가진 Node의 Child Node가 왼쪽에 있을 경우는 없음, 왜냐하면 왼쪽 Node가 있다는 것은 해당 Node보다 더 작은 값을 가진 Node가 있다는 뜻이기 때문임
+
+    if self.current_node.left != None and self.current_node.right != None: # case 3
+        if value < self.parent.value: # case 3-1
+            self.change_node = self.current_node.right
+            self.change_node_parent = self.current_node.right
+            while self.change_node.left != None:
+                self.change_node_parent = self.change_node
+                self.change_node = self.change_node.left
+
+            if self.change_node.right != None:
+                self.change_node_parent.left = self.change_node.right
+            else:
+                self.change_node_parent.left = None
+
+            self.parent.left = self.change_node
+            self.change_node.right = self.current_node.right
+            self.change_node.left = self.change_node.left
+
+    # 5.5.4. Case3-2: 삭제할 Node가 ChildNode를 두 개 가지고 있을 경우 (삭제할 Node가 Parent Node 오른쪽에 있을 때)
+    # 기본 사용 가능 전략
+    # 삭제할 Node의 오른쪽 자식 중, 가장 작은 값을 삭젷라 Node의 Parent Node가 가리키도록 한다.
+    # 삭제할 Node의 왼쪽 자식 중, 가장 큰 값을 삭제할 Node의 Parent Node가 가리키도록 한다.
+    # 기본 사용 가능 전략 중, 1번 전략을 사용하여 코드를 구현하기로 함
+    # 경우의 수가 또다시 두가지가 있음
+    # Case 3-2-1 : 삭제할 Node가 parent Node의 오른쪽에 있고, 삭제할 Node의 오른쪽 자식 중, 가장 작은 값을 가진 Node의 Chidl Node가 없을 때
+    # Case 3-2-2 : 삭제할 Node가 Parent Node의 오른쪽에 있고, 삭제할 Node의 오른쪽 자식 중, 가장 작은 값을 가진 Node의 오른쪽에 Child Node가 있을 때
+    # 가장 작은 값을 가진 Node의 Child Node가 왼쪽에 있을 경우는 없음, 왜냐하면 왼쪽 Node가 있다는 것은 해당 Node보다 더 작은 값을 가진 Node가 있다는 뜻이기 때문임
+
+        else:
+            self.change_node = self.current_node.right
+            self.change_node_parent = self.current_node.right
+            while self.change_node.left != None:
+                self.change_node_parent = self.change_node
+                self.change_node = self.change_node.left
+            if self.change_node.right != None:
+                self.change_node_parent.left = self.chagne_node.right
+            else:
+                self.change_node_parent.left = None
+            self.parent.right = self.change_node
+            self.change_node.left = self.current_node.left
+            self.change_node.right = self.current_node.right
