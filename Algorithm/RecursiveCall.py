@@ -77,3 +77,45 @@ for num in range(10):
 # 재귀 호출은 스택의 전형적인 예
 #   함수는 내부적오르 스택처럼 관리된다.
 #   참고: 파이썬에서 재귀 함수는 깊이가(한번에 호출되는...) 1000회 이하가 되어야 함
+
+# 4. 재귀 용법을 활용한 프로그래밍 연습
+#   프로그래밍 연습
+#   다음 함수를 재귀 함수를 활용해서 완성해서 1부터 num까지의 곱이 출력되게 만드세요
+
+def multiple(data):
+    if data <= 1:
+        return data
+
+    return data * multiple(data - 1) # 원래 주석되어 있던 부분
+
+print(multiple(10))
+
+#   프로그래밍 연습
+#   숫자가 들어 있는 리스트가 주어졌을 때, 리스트의 합을 리턴하는 함수를 만드세요
+
+import random
+data = random.sample(range(100), 10)
+print(data)
+
+def sumlist(data):
+    if len(data) == 1:
+        return data[0]
+
+    return data[0] + sumlist(data[1:])
+
+print(sumlist(data))
+
+#   프로그래밍 연습
+#   회문(palindrome)은 순서를 거꾸로 읽어도 제대로 읽은 것과 같은 단어와 문장을 의미함
+#   회문을 판별할 수 있는 함수를 리스트 슬라이싱을 활용해서 만드세요
+
+def palindrome(string):
+    if len(string) <= 1:
+        return True
+
+    if string[0] == string[-1]:
+        return palindrome(string[1:-1])
+    else:
+        return False
+
+print(palindrome("level"))
