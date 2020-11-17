@@ -146,3 +146,15 @@ func(3)
 # 1+3
 # 3+1
 # 정수 n이 입력으로 주어졌을 때, n을 1, 2, 3의 합으로 나타낼 수 있는 방법의 수를 구하시오
+
+def func(data):
+    if data == 1:
+        return 1
+    elif data == 2:
+        return 2
+    elif data == 3:
+        return 4
+
+    return func(data - 1) + func(data - 2) + func(data - 3)
+
+print(func(5))
