@@ -24,3 +24,11 @@ print(dt)
 #  요일 알아내기
 print(day.weekday())  # 월요일이 0이다
 print(day.isoweekday())  # 월요일이 1이다
+
+today = datetime.date.today()
+print(today)
+diff_days = datetime.timedelta(days=100)
+print(diff_days)
+
+print(today + diff_days)
+print(today - diff_days)
